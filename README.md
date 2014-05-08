@@ -1,1 +1,1 @@
-[![Build Status](http://drone.onitato.com/github.com/rack-roles/kibana/status.svg?branch=master)](http://drone.onitato.com/github.com/rack-roles/kibana)
+[![Build Status](https://drone-opsdev.rax.io/github.com/rack-roles/kibana/status.svg?branch=master)](https://drone-opsdev.rax.io/github.com/rack-roles/kibana)

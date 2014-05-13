@@ -1,0 +1,40 @@
+---
+# defaults file for kibana
+
+#Paramaters for remote repository
+kibana_git: git://github.com/elasticsearch/kibana.git
+kibana_git_branch_or_tag: master
+kibana_git_clone_location: /tmp/kibana/
+
+
+#Forcefully rebuild Kibana regardless of changes
+kibana_force_rebuild: False
+
+#Used for deploying kibana
+kibana_location: /opt/kibana
+kibana_user: www-data
+
+
+#Elasticsearch options
+#TODO: Clean up reference to elasticsearch URL, Should likely be a part of elasticsearch rather than kibana
+#kibana_elasticsearch_url: http://\"+window.location.hostname+\":9200
+kibana_elasticsearch_url: https://{{ elasticsearch_hostname }}:443
+
+#config.js
+kibana_default_route: /dashboard/file/default.json
+kibana_index: kibana_int
+
+
+#Allows the following options:
+#nginx, apache
+kibana_install_type: nginx
+
+
+#Vhost Information
+#kibana_server_name:
+kibana_vhost_name: kibana.conf
+kibana_port: 80
+
+#Custom Kibana Facts
+kibana_ansible_facts: True
+kibana_ansible_facts_name: kibana.fact

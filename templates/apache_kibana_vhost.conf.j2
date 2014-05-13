@@ -1,0 +1,27 @@
+Listen {{ kibana_port }}
+
+<VirtualHost *:{{ kibana_port }}>
+	#ServerAdmin admin@example.org
+	ServerName {{ kibana_server_name }}
+	ServerAlias kibana.domain.tld
+	DocumentRoot {{ kibana_location }}
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory {{ kibana_location }}>
+		Options -Indexes FollowSymLinks -MultiViews
+		AllowOverride all
+		Order allow,deny
+		allow from all
+	</Directory>
+	ErrorLog {{ apache_log_location }}/{{ kibana_server_name }}.error.log
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+	CustomLog {{ apache_log_location }}/{{ kibana_server_name }}.log combined
+	# To redirect all Traffic to SSL uncomment the following lines.
+	#RewriteEngine On
+	#RewriteCond %{HTTPS} off
+	#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+</VirtualHost>

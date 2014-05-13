@@ -1,0 +1,47 @@
+---
+# tasks file for kibana
+
+- name: Add OS specific variables
+  include_vars: '{{ ansible_os_family }}.yml'
+
+- name: Add Kibana user
+  user: name={{ kibana_user }}
+
+- name: Include RedHat specific packages
+  include: RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Include Debian specific packages
+  include: Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Clone Kibana
+  git: repo={{ kibana_git }} dest={{ kibana_git_clone_location }} update=yes version={{ kibana_git_branch_or_tag }}
+  register: git_clone_result
+
+- name: Rebuild Kibana
+  include: rebuild_kibana.yml
+  when: git_clone_result|changed or kibana_force_rebuild
+
+- name: Create kibana directory
+  file: name={{ kibana_location }} owner={{ kibana_user }} state=directory
+
+- name: Place kibana config
+  template: src=config.js.j2 dest={{ kibana_location }}/config.js
+
+- name: Include Nginx vhost
+  include: nginx.yml
+  when: kibana_install_type == 'nginx'
+
+- name: Include Apache vhost
+  include: apache.yml
+  when: kibana_install_type == 'apache'
+
+- name: Create ansible fact directory
+  file: name=/etc/ansible/facts.d state=directory
+
+- name: Place custom facts
+  template: src=kibana.fact.j2 dest=/etc/ansible/facts.d/{{ kibana_ansible_facts_name }}
+  when: kibana_ansible_facts
+
+#TODO: Currently an issue with location/permissions on the rackspace-elasticsearch.htpasswd file

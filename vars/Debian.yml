@@ -1,0 +1,7 @@
+---
+kibana_debian_requirements:
+  - git
+  - make
+  - nodejs
+#Not including npm as it will be captured with nodjs with the ppa we are using.
+#Including npm causes things to break

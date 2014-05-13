@@ -1,0 +1,6 @@
+---
+kibana_redhat_requirements:
+  - git
+  - make
+  - npm
+  - nodejs

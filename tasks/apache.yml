@@ -1,0 +1,12 @@
+---
+#Tasks for dropping the appropriate vhost in place
+
+- name: Debian | Place apache vhost
+  template: src=apache_kibana_vhost.conf.j2 dest={{ apache_vhost_path }}/{{ kibana_vhost_name }}
+  notify: restart apache
+  when: ansible_os_family == 'Debian'
+
+- name: RedHat | Place apache vhost
+  template: src=apache_kibana_vhost.conf.j2 dest={{ apache_vhost_path }}/{{ kibana_vhost_name }}
+  notify: restart apache
+  when: ansible_os_family == 'RedHat'

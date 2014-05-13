@@ -1,0 +1,44 @@
+server {
+    listen {{ kibana_port }};
+    listen [::]:{{ kibana_port }};
+
+    server_name _;
+
+    proxy_read_timeout 120s; # slow queries happen
+
+    expires -1;
+
+    location / {
+        root {{ kibana_location }};
+    }
+
+    location /es/ {
+        rewrite ^/es/_nodes$ /_nodes break;
+        rewrite ^/es/(.*/_aliases)$ /$1 break;
+        rewrite ^/es/(.*/_mapping)$ /$1 break;
+        rewrite ^/es/(.*/_mapping/field/\*)$ /$1 break;
+        return 403;
+
+        limit_except GET {
+            deny all;
+        }
+
+        proxy_pass https://{{ kibana_elasticsearch_url }};
+    }
+
+    location ~ ^/es/(.*/_search)$ {
+        rewrite ^/es/(.*/_search)$ /$1 break;
+
+        limit_except POST {
+            deny all;
+        }
+
+        proxy_pass https://{{ kibana_elasticsearch_url }};
+    }
+
+    location /es/{{ kibana_index }}/ {
+        rewrite ^/es/({{ kibana_index }}/.*)$ /$1 break;
+        proxy_pass https://{{ kibana_elasticsearch_url }};
+    }
+
+}

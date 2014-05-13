@@ -1,0 +1,23 @@
+---
+#In charge of rebuilding Kibana.
+#This is called when either:
+#   the git module reports a change
+#   kibana_force_rebuild is overwridden to True
+- name: Install npm modules
+  command: chdir={{ kibana_git_clone_location }} npm install
+
+- name: Install grunt-cli
+  command: chdir={{ kibana_git_clone_location }} npm install -g grunt-cli
+
+- name: Grunt build
+  command: chdir={{ kibana_git_clone_location }} grunt build
+
+- name: Update npm modules
+  command: chdir={{ kibana_git_clone_location }} npm update
+
+- name: Chown kibana directory
+  file: path={{ kibana_location }} owner={{ kibana_user }} recurse=True state=directory
+
+#TODO: Clean up the copy function
+- name: Copy kibana into directory
+  command: rsync -avP {{ kibana_git_clone_location }}/src/ {{ kibana_location }}

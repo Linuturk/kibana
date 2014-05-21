@@ -18,7 +18,7 @@ kibana_user: www-data
 #Elasticsearch options
 #TODO: Clean up reference to elasticsearch URL, Should likely be a part of elasticsearch rather than kibana
 #kibana_elasticsearch_url: http://\"+window.location.hostname+\":9200
-kibana_elasticsearch_url: https://{{ elasticsearch_hostname }}:443
+kibana_elasticsearch_url: https://{{ kibana_elasticsearch_hostname }}:443
 
 #config.js
 kibana_default_route: /dashboard/file/default.json

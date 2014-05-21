@@ -5,9 +5,6 @@
   notify: Reload nginx
   when: ansible_os_family == 'Debian'
 
-- name: Debain | Remove default
-  file: dest=/etc/nginx/sites-enabled/default state=absent
-
 - name: RedHat | Place nginx config
   template: src=nginx_kibana_vhost.conf.j2 dest=/etc/nginx/conf.d/{{ kibana_vhost_name }}
   notify: Reload nginx

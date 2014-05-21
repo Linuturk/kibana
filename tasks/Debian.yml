@@ -1,11 +1,16 @@
 ---
+- name: >
+    Debian | set_fact
+      kibana_supported_os: True
+  set_fact:
+    kibana_supported_os: True
 
-- name: Install node repository for apt
+- name: Debian | Install node repository for apt
   apt_repository: repo='ppa:chris-lea/node.js' state=present
 
-- name: Install sytem requirements via apt
+- name: Debian | Install sytem requirements via apt
   apt: pkg={{ item }} update_cache=yes cache_valid_time=86400 state=present
   with_items: kibana_debian_requirements
 
-- name: Link /usr/bin/node to /usr/bin/nodejs
+- name: Debian | Link /usr/bin/node to /usr/bin/nodejs
   file: src=/usr/bin/nodejs dest=/usr/bin/node state=link

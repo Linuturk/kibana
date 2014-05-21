@@ -1,11 +1,13 @@
 ---
 # tasks file for kibana
 
+- name: Check for kibana_elasticsearch_hostname
+  fail:
+    msg: "kibana_elasticsearch_hostname has not been defined"
+  when: kibana_elasticsearch_hostname is not defined
+
 - name: Add OS specific variables
   include_vars: '{{ ansible_os_family }}.yml'
-
-- name: Add Kibana user
-  user: name={{ kibana_user }}
 
 - name: Include RedHat specific packages
   include: RedHat.yml
@@ -14,6 +16,14 @@
 - name: Include Debian specific packages
   include: Debian.yml
   when: ansible_os_family == 'Debian'
+
+- name: Check for unsupported target operating system
+  fail:
+    msg: "The operating system of the target machine ({{ inventory_hostname }}) is not currently supported."
+  when: kibana_supported_os is not defined
+
+- name: Add Kibana user
+  user: name={{ kibana_user }}
 
 - name: Clone Kibana
   git: repo={{ kibana_git }} dest={{ kibana_git_clone_location }} update=yes version={{ kibana_git_branch_or_tag }}

@@ -1,5 +1,11 @@
 ---
+- name: >
+    RedHat | set_fact
+      kibana_supported_os: True
+  set_fact:
+    kibana_supported_os: True
+
 #TODO: Enable EPEL and install latest
-- name: Install git via yum
+- name: RedHat | Install git via yum
   yum: name={{ item }} state=present
   with_items: kibana_redhat_requirements
